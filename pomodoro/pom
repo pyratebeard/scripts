@@ -1,0 +1,26 @@
+#!/bin/sh
+# ┳━┓┏━┓┏┏┓┏━┓┳━┓┏━┓┳━┓┏━┓
+# ┃━┛┃ ┃┃┃┃┃ ┃┃ ┃┃ ┃┃┳┛┃ ┃
+# ┇  ┛━┛┛ ┇┛━┛┇━┛┛━┛┇┗┛┛━┛
+#   what ┅┳┅ simple terminal pomodoro timer
+#    who ┅╋┅ pyratebeard <root@pyratebeard.net>
+#  where ┅╋┅ github.com/unixchat/scripts/pomodoro
+#  usage ┅┻┅ ./pom <minutes> #default = 25min
+
+test $1 && work=$1 || work=25
+
+countdown() {
+  IFS=:
+  set -- $*
+  secs=$(( ${1#0} * 60 + 00 ))
+  while [ $secs -gt 0 ]
+  do
+    sleep 1 &
+    printf "\r%02d:%02d" $(( (secs/60)%60)) $((secs%60))
+    secs=$(( $secs - 1 ))
+    wait
+  done
+  echo
+}
+
+countdown ${work}
